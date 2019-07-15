@@ -1,6 +1,7 @@
 package main
 
 import (
+	"easydocker/docker"
 	"easydocker/view"
 	ui "github.com/gizak/termui/v3"
 	"log"
@@ -13,7 +14,11 @@ func main() {
 	}
 	defer ui.Close()
 
+	docker.InitDocker()
+
 	newView := view.CreateView()
+	dockerInfo := docker.GetDockerInfo()
+	view.RefreshView(dockerInfo)
 	ui.Render(newView)
 
 	uiEvents := ui.PollEvents()
@@ -26,7 +31,9 @@ func main() {
 				return
 			}
 		case <-ticker:
-
+			dockerInfo := docker.GetDockerInfo()
+			view.RefreshView(dockerInfo)
+			ui.Render(newView)
 		}
 	}
 }

@@ -6,7 +6,8 @@ import (
 )
 
 type DockerInfo struct {
-	images []docker.APIImages
+	Images     []docker.APIImages
+	Containers []docker.APIContainers
 }
 
 var (
@@ -23,11 +24,16 @@ func InitDocker() {
 }
 
 func GetDockerInfo() DockerInfo {
-	imgs, err := client.ListImages(docker.ListImagesOptions{All: false})
+	images, err := client.ListImages(docker.ListImagesOptions{All: true})
 	if err != nil {
 		log.Fatalf("failed received docker images: %v", err)
 	}
+	containers, err := client.ListContainers(docker.ListContainersOptions{All: true})
+	if err != nil {
+		log.Fatalf("failed received docker containers: %v", err)
+	}
 	return DockerInfo{
-		imgs,
+		images,
+		containers,
 	}
 }
