@@ -23,6 +23,7 @@ func main() {
 
 	uiEvents := ui.PollEvents()
 	ticker := time.NewTicker(time.Second).C
+	view.RefreshView(dockerInfo)
 	for {
 		select {
 		case e := <-uiEvents:
@@ -31,9 +32,9 @@ func main() {
 				return
 			}
 		case <-ticker:
-			dockerInfo := docker.GetDockerInfo()
-			view.RefreshView(dockerInfo)
-			ui.Render(newView)
+			//dockerInfo := docker.GetDockerInfo()
+			//view.RefreshView(dockerInfo)
+			//ui.Render(newView)
 		}
 	}
 }
