@@ -3,6 +3,7 @@ module easydocker
 go 1.12
 
 require (
+	github.com/docker/docker v0.7.3-0.20190309235953-33c3200e0d16
 	github.com/fsouza/go-dockerclient v1.4.1
 	github.com/gizak/termui v2.3.0+incompatible // indirect
 	github.com/gizak/termui/v3 v3.0.0

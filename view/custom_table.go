@@ -6,9 +6,8 @@
 package view
 
 import (
-	"image"
-
 	. "github.com/gizak/termui/v3"
+	"image"
 )
 
 /*Table is like:

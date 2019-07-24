@@ -24,18 +24,22 @@ func round(val float64, roundOn float64, places int) (newVal float64) {
 	return
 }
 
-func convert(sizeB int64) string {
-	size := float64(sizeB)
+func convert(sizeB float64) string {
+	var getSuffix string
 	suffixes[0] = "B"
 	suffixes[1] = "KB"
 	suffixes[2] = "MB"
 	suffixes[3] = "GB"
 	suffixes[4] = "TB"
-
-	base := math.Log(size) / math.Log(1024)
+	base := math.Log(sizeB) / math.Log(1024)
 	getSize := round(math.Pow(1024, base-math.Floor(base)), .5, 2)
-	getSuffix := suffixes[int(math.Floor(base))]
-	resp := strconv.FormatFloat(getSize, 'f', -1, 64) + " " + string(getSuffix)
+	if sizeB == 0 {
+		getSuffix = suffixes[0]
+		getSize = 0
+	} else {
+		getSuffix = suffixes[int(math.Floor(base))]
+	}
+	resp := strconv.FormatFloat(getSize, 'f', -1, 64) + string(getSuffix)
 	return resp
 }
 

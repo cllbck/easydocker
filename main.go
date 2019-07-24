@@ -32,9 +32,9 @@ func main() {
 				return
 			}
 		case <-ticker:
-			//dockerInfo := docker.GetDockerInfo()
-			//view.RefreshView(dockerInfo)
-			//ui.Render(newView)
+			dockerInfo := docker.GetDockerInfo()
+			view.RefreshView(dockerInfo)
+			ui.Render(newView)
 		}
 	}
 }

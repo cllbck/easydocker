@@ -8,6 +8,12 @@ import (
 type DockerInfo struct {
 	Images     []docker.APIImages
 	Containers []docker.APIContainers
+	Stats      []Stats
+}
+
+type Stats struct {
+	Container docker.APIContainers
+	Stats     docker.Stats
 }
 
 var (
@@ -32,8 +38,37 @@ func GetDockerInfo() DockerInfo {
 	if err != nil {
 		log.Fatalf("failed received docker containers: %v", err)
 	}
+
+	var stats []Stats
+
+	containersForStats, err := client.ListContainers(docker.ListContainersOptions{All: false})
+	if err != nil {
+		log.Fatalf("failed received docker containers: %v", err)
+	}
+
+	for _, container := range containersForStats {
+		stats = append(stats, Stats{
+			container,
+			*getContainerStat(container.ID),
+		})
+	}
+
 	return DockerInfo{
 		images,
 		containers,
+		stats,
 	}
+}
+
+func getContainerStat(id string) *docker.Stats {
+	stats := make(chan *docker.Stats)
+
+	go func() {
+		if err := client.Stats(docker.StatsOptions{ID: id, Stats: stats, Stream: false}); err != nil {
+			log.Fatalf("failed received  container id-%s stats: %v", id, err)
+		}
+	}()
+
+	stat := <-stats
+	return stat
 }
